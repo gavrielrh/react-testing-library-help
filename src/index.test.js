@@ -6,26 +6,27 @@ trying to do), and posting a link to your fork on our Discord chat:
 https://testing-library.com/discord
 */
 
-// here's an example
 import React from 'react'
+import styled from '@emotion/styled'
 import '@testing-library/jest-dom'
-import userEvent from '@testing-library/user-event'
 import {render, screen} from '@testing-library/react'
 
-function Counter() {
-  const [count, setCount] = React.useState(0)
+const StyledDiv = styled('div')({
+  '[aria-checked="true"]:has(+ [aria-checked="false"])': {
+    color: 'red',
+  }
+});
+
+function DoubleCheckbox() {
   return (
-    <>
-      <p>{count}</p>
-      <button onClick={() => setCount(count + 1)}>click me</button>
-    </>
+    <StyledDiv>
+      <input type="checkbox" />
+      <input type="checkbox" />
+    </StyledDiv>
   )
 }
 
-test('renders counter', async () => {
-  render(<Counter />)
-  const count = screen.getByText('0')
-  const button = screen.getByText(/click me/i)
-  userEvent.click(button)
-  expect(count).toHaveTextContent('1')
+test('renders double checkbox', async () => {
+  render(<DoubleCheckbox />)
+  expect(screen.getByRole('radiogroup')).toBeTruthy();
 })
